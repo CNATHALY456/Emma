@@ -1,0 +1,543 @@
+* {
+  box-sizing: border-box;
+}
+
+/* Estilos del contenedor general */
+.calendario-container {
+  min-height: 100vh;
+  background: #fff7fa;
+  padding: 30px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #3d3035;
+}
+
+/* Encabezado */
+.encabezado {
+  max-width: 1100px;
+  margin: 0 auto 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titulo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icono-titulo {
+  width: 55px;
+  height: 55px;
+  background: #f8dce7;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.titulo h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.titulo p {
+  margin: 5px 0 0;
+  color: #8a777f;
+  font-size: 14px;
+}
+
+.boton-hoy {
+  padding: 11px 22px;
+  background: white;
+  border: 1px solid #ead8df;
+  border-radius: 10px;
+  color: #9d5271;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.boton-hoy:hover {
+  background: #fbeaf1;
+}
+
+/* Calendario */
+.calendario-card {
+  max-width: 1100px;
+  margin: auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 5px 25px rgba(100, 60, 75, 0.08);
+  overflow: hidden;
+}
+
+.calendario-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px 30px;
+  border-bottom: 1px solid #f0e4e9;
+}
+
+.mes-anio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mes-anio h2 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.mes-anio span {
+  color: #a78c96;
+  font-size: 18px;
+}
+
+.boton-navegacion {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #fcecf2;
+  color: #9c4d6d;
+  font-size: 30px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.boton-navegacion:hover {
+  background: #f6d6e2;
+}
+
+.dias-semana {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0 15px;
+  border-bottom: 1px solid #f0e4e9;
+}
+
+.dia-semana {
+  padding: 16px 5px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  color: #a38d96;
+}
+
+.grid-calendario {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 10px 15px 20px;
+}
+
+.dia {
+  min-height: 105px;
+  background: white;
+  border: 1px solid #f2e9ed;
+  cursor: pointer;
+  position: relative;
+  padding: 12px;
+  text-align: left;
+  transition: 0.2s;
+}
+
+.dia:hover {
+  background: #fff5f8;
+  box-shadow: inset 0 0 0 2px #f3d4df;
+}
+
+.numero-dia {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #57454d;
+}
+
+.dia.otro-mes {
+  background: #fcfafb;
+}
+
+.dia.otro-mes .numero-dia {
+  color: #cfc0c6;
+}
+
+.dia.hoy .numero-dia {
+  background: #bd6385;
+  color: white;
+  font-weight: bold;
+}
+
+.dia.seleccionado {
+  background: #fff0f5;
+  box-shadow: inset 0 0 0 2px #d783a2;
+}
+
+/* Leyenda */
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  padding: 18px 30px;
+  border-top: 1px solid #f0e4e9;
+  font-size: 13px;
+  color: #77666e;
+}
+
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.punto {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.periodo { background: #d86c89; }
+.anticonceptivo { background: #9b7ac5; }
+.sintomas { background: #e8b74b; }
+.flujo { background: #65aebe; }
+
+/* Modal emergente */
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(48, 35, 41, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 650px;
+  max-height: 92vh;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 15px 50px rgba(50, 30, 40, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 25px 28px;
+  border-bottom: 1px solid #f0e4e9;
+}
+
+.modal-etiqueta {
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #b85c7d;
+}
+
+.modal-header h2 {
+  margin: 6px 0 0;
+  font-size: 19px;
+  text-transform: capitalize;
+}
+
+.cerrar {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 50%;
+  background: #f8eef2;
+  color: #8f6d79;
+  font-size: 24px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cerrar:hover {
+  background: #f3dce5;
+}
+
+.modal-body {
+  padding: 25px 28px;
+  overflow-y: auto;
+}
+
+.pregunta {
+  margin: 0 0 15px;
+  font-weight: bold;
+}
+
+/* Categorías dentro del modal */
+.categorias {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.categoria {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px;
+  background: white;
+  border: 1px solid #eadfe4;
+  border-radius: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.categoria:hover {
+  background: #fff7fa;
+  border-color: #dfb5c5;
+}
+
+.categoria.activa {
+  background: #fff0f5;
+  border-color: #cc7795;
+  box-shadow: inset 0 0 0 1px #cc7795;
+}
+
+.categoria-icono {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #f8e5ec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.categoria span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.categoria strong {
+  font-size: 13px;
+}
+
+.categoria small {
+  color: #96838c;
+  font-size: 11px;
+}
+
+/* Opciones de los formularios */
+.formulario-extra {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 15px;
+  background: #fff8fa;
+  border: 1px solid #f0dfe6;
+}
+
+.titulo-seccion {
+  font-size: 17px;
+  font-weight: bold;
+  color: #8f4967;
+  margin-bottom: 5px;
+}
+
+.descripcion {
+  margin: 0 0 15px;
+  color: #8d7b83;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.check-opcion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px;
+  margin-bottom: 7px;
+  background: white;
+  border: 1px solid #eadfe4;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.check-opcion:hover {
+  background: #fff1f5;
+}
+
+.check-opcion input {
+  width: 17px;
+  height: 17px;
+  accent-color: #b85c7d;
+}
+
+.opciones-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.estado-opcion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: white;
+  border: 1px solid #eadfe4;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.2s;
+}
+
+.estado-opcion:hover {
+  background: #fff1f5;
+}
+
+.estado-opcion input {
+  width: 16px;
+  height: 16px;
+  accent-color: #b85c7d;
+}
+
+.subtitulo {
+  margin: 18px 0 10px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.mini-opciones {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.mini-opciones label {
+  padding: 9px;
+  background: white;
+  border: 1px solid #eadfe4;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.mini-opciones input {
+  accent-color: #b85c7d;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #dfd1d7;
+  border-radius: 10px;
+  padding: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  outline: none;
+  min-height: 120px;
+}
+
+textarea:focus {
+  border-color: #c36d8d;
+  box-shadow: 0 0 0 2px #f6dce6;
+}
+
+/* Pie del modal */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 18px 28px;
+  border-top: 1px solid #f0e4e9;
+  background: #fffafb;
+}
+
+.boton-cancelar,
+.boton-guardar {
+  padding: 11px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.boton-cancelar {
+  background: white;
+  border: 1px solid #e3d5db;
+  color: #77656d;
+}
+
+.boton-cancelar:hover {
+  background: #faf5f7;
+}
+
+.boton-guardar {
+  background: #b85c7d;
+  border: none;
+  color: white;
+}
+
+.boton-guardar:hover {
+  background: #9f4d6b;
+}
+
+/* Diseño adaptable para celulares */
+@media (max-width: 700px) {
+  .calendario-container {
+    padding: 15px;
+  }
+
+  .titulo h1 {
+    font-size: 21px;
+  }
+
+  .titulo p {
+    font-size: 12px;
+  }
+
+  .categorias,
+  .opciones-grid,
+  .mini-opciones {
+    grid-template-columns: 1fr;
+  }
+
+  .dia {
+    min-height: 70px;
+    padding: 7px;
+  }
+
+  .grid-calendario {
+    padding: 5px;
+  }
+
+  .dias-semana {
+    padding: 0 5px;
+  }
+
+  .leyenda {
+    padding: 15px;
+    gap: 12px;
+  }
+
+  .modal {
+    max-height: 95vh;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}

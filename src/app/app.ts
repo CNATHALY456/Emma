@@ -1,12 +1,20 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
+import { CicloComponent } from './ciclo/ciclo';
+import { CalendarioComponent } from './calendario/calendario';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    CicloComponent,
+    CalendarioComponent
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('emma');
+
 }

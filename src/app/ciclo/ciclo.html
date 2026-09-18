@@ -1,0 +1,65 @@
+<div class="calendar-container" [@fadeIn]>
+  <!-- Leyendas en las esquinas -->
+  <div class="info-card top-left">
+    <h3 class="title lutea">Fase Lútea</h3>
+    <p>El cuerpo lúteo se desvaneces.</p>
+  </div>
+
+  <div class="info-card top-right">
+    <h3 class="title regla">Regla</h3>
+    <p>Las paredes del útero se desprenden y se inicia el periodo.</p>
+  </div>
+
+  <!-- Rueda SVG del Ciclo -->
+  <div class="wheel-wrapper">
+    <svg viewBox="0 0 500 500" class="cycle-svg">
+      
+      <!-- Anillo Exterior (Días 1 a 28) -->
+      <g class="days-ring">
+        <g *ngFor="let day of days" (click)="selectDay(day.dayNumber)" class="day-segment" [class.active]="day.dayNumber === currentDay">
+          <path [attr.d]="describeArc(250, 250, 160, 220, day.startAngle, day.endAngle)"
+                [attr.fill]="day.color"
+                stroke="#ffffff"
+                stroke-width="2" />
+          
+          <!-- Número del día -->
+          <text [attr.x]="getTextPosition(250, 250, 190, day.startAngle, day.endAngle).x"
+                [attr.y]="getTextPosition(250, 250, 190, day.startAngle, day.endAngle).y"
+                text-anchor="middle"
+                alignment-baseline="middle"
+                class="day-number">
+            {{ day.dayNumber }}
+          </text>
+        </g>
+      </g>
+
+      <!-- Anillo Interior (Fases principales) -->
+      <g class="phases-ring">
+        <!-- Menstruación (Días 1-5) -->
+        <path [attr.d]="describeArc(250, 250, 100, 155, -90, -25.7)" [attr.fill]="colors.reglaInner" />
+        <!-- Días Infértiles 1 (Días 6-10) -->
+        <path [attr.d]="describeArc(250, 250, 100, 155, -25.7, 38.5)" [attr.fill]="colors.infertile1Inner" />
+        <!-- Días Fértiles (Días 11-21) -->
+        <path [attr.d]="describeArc(250, 250, 100, 155, 38.5, 180)" [attr.fill]="colors.fertileInner" />
+        <!-- Días Infértiles 2 (Días 22-28) -->
+        <path [attr.d]="describeArc(250, 250, 100, 155, 180, 270)" [attr.fill]="colors.infertile2Inner" />
+      </g>
+
+      <!-- Círculo Central -->
+      <circle cx="250" cy="250" r="95" fill="#FFFFFF" class="center-circle" />
+      <text x="250" y="240" text-anchor="middle" class="center-title">Ciclo</text>
+      <text x="250" y="270" text-anchor="middle" class="center-subtitle">Menstrual</text>
+    </svg>
+  </div>
+
+  <!-- Leyendas Inferiores -->
+  <div class="info-card bottom-left">
+    <h3 class="title ovulacion">Ovulación</h3>
+    <p>El ovario libera un óvulo maduro para ser fecundado.</p>
+  </div>
+
+  <div class="info-card bottom-right">
+    <h3 class="title folicular">Fase Folicular</h3>
+    <p>Se desarrolla el folículo en el ovario.</p>
+  </div>
+</div>

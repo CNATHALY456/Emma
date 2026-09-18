@@ -1,0 +1,305 @@
+<div class="calendario-container">
+
+  <!-- Encabezado principal del módulo -->
+  <div class="encabezado">
+    <div class="titulo">
+      <div class="icono-titulo">🌸</div>
+      <div>
+        <h1>Mi ciclo menstrual</h1>
+        <p>Registra cómo te sientes cada día</p>
+      </div>
+    </div>
+    <!-- Botón para regresar al día actual rápidamente -->
+    <button class="boton-hoy" (click)="irHoy()">Hoy</button>
+  </div>
+
+  <!-- ==========================================
+       SECCIÓN DEL CALENDARIO
+       ========================================== -->
+  <div class="calendario-card">
+
+    <!-- Controles de navegación de mes y año -->
+    <div class="calendario-header">
+      <button class="boton-navegacion" (click)="mesAnterior()">‹</button>
+      <div class="mes-anio">
+        <h2>{{ meses[mesActual] }}</h2>
+        <span>{{ anioActual }}</span>
+      </div>
+      <button class="boton-navegacion" (click)="mesSiguiente()">›</button>
+    </div>
+
+    <!-- Encabezados de los días de la semana -->
+    <div class="dias-semana">
+      <div class="dia-semana" *ngFor="let dia of diasSemana">
+        {{ dia }}
+      </div>
+    </div>
+
+    <!-- Cuadrícula interactiva de los días del mes -->
+    <div class="grid-calendario">
+      <button 
+        class="dia" 
+        *ngFor="let dia of diasCalendario"
+        [class.otro-mes]="!dia.perteneceAlMes"
+        [class.hoy]="dia.esHoy"
+        [class.seleccionado]="dia.seleccionado"
+        (click)="seleccionarDia(dia)">
+        <span class="numero-dia">{{ dia.numero }}</span>
+      </button>
+    </div>
+
+    <!-- Leyenda indicadora de categorías de registro -->
+    <div class="leyenda">
+      <div class="leyenda-item">
+        <span class="punto periodo"></span> Periodo
+      </div>
+      <div class="leyenda-item">
+        <span class="punto anticonceptivo"></span> Anticonceptivo
+      </div>
+      <div class="leyenda-item">
+        <span class="punto sintomas"></span> Síntomas
+      </div>
+      <div class="leyenda-item">
+        <span class="punto flujo"></span> Flujo
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==========================================
+     MODAL DE REGISTRO
+     ========================================== -->
+<div class="modal-fondo" *ngIf="mostrarFormulario" (click)="cerrarFormulario()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <!-- Cabecera del modal con fecha seleccionada -->
+    <div class="modal-header">
+      <div>
+        <span class="modal-etiqueta">REGISTRAR DÍA</span>
+        <h2>{{ obtenerFechaSeleccionada() }}</h2>
+      </div>
+      <button class="cerrar" (click)="cerrarFormulario()">×</button>
+    </div>
+
+    <!-- Cuerpo principal del formulario del modal -->
+    <div class="modal-body">
+      <p class="pregunta">¿Qué deseas registrar?</p>
+
+      <!-- Selector de categorías de registro -->
+      <div class="categorias">
+        <!-- Opción: Periodo -->
+        <button 
+          class="categoria" 
+          [class.activa]="tipoRegistro === 'periodo'" 
+          (click)="tipoRegistro = 'periodo'">
+          <span class="categoria-icono">🩸</span>
+          <span>
+            <strong>Periodo</strong>
+            <small>Inicio, continuidad o fin</small>
+          </span>
+        </button>
+
+        <!-- Opción: Anticonceptivo -->
+        <button 
+          class="categoria" 
+          [class.activa]="tipoRegistro === 'anticonceptivo'" 
+          (click)="tipoRegistro = 'anticonceptivo'">
+          <span class="categoria-icono">💊</span>
+          <span>
+            <strong>Anticonceptivo</strong>
+            <small>Selecciona un método</small>
+          </span>
+        </button>
+
+        <!-- Opción: Estado de ánimo -->
+        <button 
+          class="categoria" 
+          [class.activa]="tipoRegistro === 'estado'" 
+          (click)="tipoRegistro = 'estado'">
+          <span class="categoria-icono">😊</span>
+          <span>
+            <strong>Estado de ánimo</strong>
+            <small>¿Cómo te sentiste?</small>
+          </span>
+        </button>
+
+        <!-- Opción: Síntomas -->
+        <button 
+          class="categoria" 
+          [class.activa]="tipoRegistro === 'sintomas'" 
+          (click)="tipoRegistro = 'sintomas'">
+          <span class="categoria-icono">🤕</span>
+          <span>
+            <strong>Síntomas</strong>
+            <small>Registra cómo te sientes</small>
+          </span>
+        </button>
+
+        <!-- Opción: Flujo vaginal -->
+        <button 
+          class="categoria" 
+          [class.activa]="tipoRegistro === 'flujo'" 
+          (click)="tipoRegistro = 'flujo'">
+          <span class="categoria-icono">💧</span>
+          <span>
+            <strong>Flujo vaginal</strong>
+            <small>Características del flujo</small>
+          </span>
+        </button>
+
+        <!-- Opción: Relaciones -->
+        <button 
+          class="categoria" 
+          [class.activa]="tipoRegistro === 'relaciones'" 
+          (click)="tipoRegistro = 'relaciones'">
+          <span class="categoria-icono">❤️</span>
+          <span>
+            <strong>Relaciones</strong>
+            <small>Registra actividad sexual</small>
+          </span>
+        </button>
+
+        <!-- Opción: Notas generales -->
+        <button 
+          class="categoria" 
+          [class.activa]="tipoRegistro === 'notas'" 
+          (click)="tipoRegistro = 'notas'">
+          <span class="categoria-icono">📝</span>
+          <span>
+            <strong>Notas</strong>
+            <small>Agrega una observación</small>
+          </span>
+        </button>
+      </div>
+
+      <!-- ====================================
+           FORMULARIOS ESPECÍFICOS SEGÚN CATEGORÍA
+           ==================================== -->
+
+      <!-- Formulario: Periodo -->
+      <div class="formulario-extra" *ngIf="tipoRegistro === 'periodo'">
+        <div class="titulo-seccion">🩸 Registrar periodo</div>
+        <p class="descripcion">Puedes seleccionar una o varias opciones.</p>
+
+        <label class="check-opcion" *ngFor="let opcion of periodoOpciones">
+          <input 
+            type="checkbox" 
+            [checked]="periodoSeleccionado.includes(opcion)"
+            (change)="toggleOpcion(periodoSeleccionado, opcion, $any($event.target).checked)">
+          <span>{{ opcion }}</span>
+        </label>
+
+        <div class="subtitulo">Intensidad del sangrado</div>
+        <div class="mini-opciones">
+          <label *ngFor="let intensidad of intensidadesSangrado">
+            <input 
+              type="checkbox" 
+              [checked]="intensidadSangradoSeleccionada.includes(intensidad)"
+              (change)="toggleOpcion(intensidadSangradoSeleccionada, intensidad, $any($event.target).checked)">
+            {{ intensidad }}
+          </label>
+        </div>
+      </div>
+
+      <!-- Formulario: Anticonceptivo -->
+      <div class="formulario-extra" *ngIf="tipoRegistro === 'anticonceptivo'">
+        <div class="titulo-seccion">💊 Anticonceptivo</div>
+        <p class="descripcion">Selecciona solamente un método.</p>
+
+        <label class="check-opcion" *ngFor="let anticonceptivo of anticonceptivos">
+          <input 
+            type="radio" 
+            name="anticonceptivo" 
+            [value]="anticonceptivo" 
+            [(ngModel)]="anticonceptivoSeleccionado"
+            [ngModelOptions]="{ standalone: true }">
+          <span>{{ anticonceptivo }}</span>
+        </label>
+      </div>
+
+      <!-- Formulario: Estado de Ánimo -->
+      <div class="formulario-extra" *ngIf="tipoRegistro === 'estado'">
+        <div class="titulo-seccion">😊 ¿Cómo te sentiste hoy?</div>
+        <p class="descripcion">Puedes seleccionar más de una opción.</p>
+
+        <div class="opciones-grid">
+          <label class="estado-opcion" *ngFor="let estado of estadosAnimo">
+            <input 
+              type="checkbox" 
+              [checked]="estadoSeleccionado.includes(estado)"
+              (change)="toggleEstado(estado, $any($event.target).checked)">
+            <span>{{ estado }}</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Formulario: Síntomas -->
+      <div class="formulario-extra" *ngIf="tipoRegistro === 'sintomas'">
+        <div class="titulo-seccion">🤕 Síntomas</div>
+        <p class="descripcion">Puedes seleccionar todos los que correspondan. "Todo va bien" funciona como una opción independiente.</p>
+
+        <div class="opciones-grid">
+          <label class="estado-opcion" *ngFor="let sintoma of sintomas">
+            <input 
+              type="checkbox" 
+              [checked]="sintomasSeleccionados.includes(sintoma)"
+              (change)="toggleSintoma(sintoma, $any($event.target).checked)">
+            <span>{{ sintoma }}</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Formulario: Flujo Vaginal -->
+      <div class="formulario-extra" *ngIf="tipoRegistro === 'flujo'">
+        <div class="titulo-seccion">💧 Flujo vaginal</div>
+        <p class="descripcion">Selecciona las características que correspondan.</p>
+
+        <div class="opciones-grid">
+          <label class="estado-opcion" *ngFor="let flujo of flujos">
+            <input 
+              type="checkbox" 
+              [checked]="flujoSeleccionado.includes(flujo)"
+              (change)="toggleFlujo(flujo, $any($event.target).checked)">
+            <span>{{ flujo }}</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Formulario: Relaciones -->
+      <div class="formulario-extra" *ngIf="tipoRegistro === 'relaciones'">
+        <div class="titulo-seccion">❤️ Relaciones</div>
+        <p class="descripcion">Puedes seleccionar más de una opción. "No he practicado sexo" es exclusiva.</p>
+
+        <div class="opciones-grid">
+          <label class="estado-opcion" *ngFor="let relacion of relaciones">
+            <input 
+              type="checkbox" 
+              [checked]="relacionesSeleccionadas.includes(relacion)"
+              (change)="toggleRelacion(relacion, $any($event.target).checked)">
+            <span>{{ relacion }}</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Formulario: Notas -->
+      <div class="formulario-extra" *ngIf="tipoRegistro === 'notas'">
+        <div class="titulo-seccion">📝 Notas del día</div>
+        <textarea 
+          [(ngModel)]="notas" 
+          [ngModelOptions]="{ standalone: true }" 
+          placeholder="Escribe aquí cualquier observación..." 
+          rows="5">
+        </textarea>
+      </div>
+
+    </div>
+
+    <!-- Pie del modal con acciones de cancelación y guardado -->
+    <div class="modal-footer">
+      <button class="boton-cancelar" (click)="cerrarFormulario()">Cancelar</button>
+      <button class="boton-guardar" (click)="guardarRegistro()">Guardar registro</button>
+    </div>
+
+  </div>
+</div>

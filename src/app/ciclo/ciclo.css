@@ -1,0 +1,77 @@
+.calendar-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px;
+  align-items: center;
+  background-color: #FAF5EF;
+  padding: 30px;
+  border-radius: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: 'Poppins', sans-serif;
+}
+
+.wheel-wrapper {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  position: relative;
+}
+
+.cycle-svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Interactividad y animaciones */
+.day-segment {
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.day-segment:hover path {
+  filter: brightness(0.92);
+}
+
+.day-segment.active path {
+  stroke: #4A148C;
+  stroke-width: 3px;
+  filter: brightness(1.05);
+}
+
+.day-number {
+  font-size: 14px;
+  font-weight: 600;
+  fill: #333333;
+  user-select: none;
+}
+
+/* Textos Centrales */
+.center-title {
+  font-size: 24px;
+  font-family: 'Brush Script MT', cursive, sans-serif;
+  fill: #D81B60;
+}
+
+.center-subtitle {
+  font-size: 22px;
+  font-family: 'Brush Script MT', cursive, sans-serif;
+  fill: #D81B60;
+}
+
+/* Tarjetas Informativas */
+.info-card {
+  font-size: 13px;
+  color: #555;
+}
+
+.info-card h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  font-family: 'Georgia', serif;
+}
+
+.lutea { color: #E65100; }
+.regla { color: #C2185B; }
+.ovulacion { color: #558B2F; }
+.folicular { color: #00838F; }
