@@ -1,0 +1,215 @@
+<div class="agua-page">
+
+  <!-- Encabezado de la página: Título principal y fecha actual -->
+  <div class="agua-header">
+    <div>
+      <p class="saludo">Mi registro diario</p>
+      <h1>Agua</h1>
+      <p class="subtitulo">
+        Lleva un registro de tu consumo de agua
+      </p>
+    </div>
+
+    <div class="fecha-card">
+      <span>Hoy</span>
+      <strong>22</strong>
+      <small>Septiembre 2026</small>
+    </div>
+  </div>
+
+
+  <!-- Tarjeta principal: Registro interactivo del consumo de agua diario -->
+  <div class="card agua-card">
+
+    <div class="card-title">
+      <div>
+        <h2>¿Cuánta agua has tomado hoy?</h2>
+        <p>Marca cada vaso que hayas tomado 💙</p>
+      </div>
+      <div class="contador">
+        <strong>{{ vasosTomados }}/{{ metaVasos }}</strong>
+        <span>vasos</span>
+      </div>
+    </div>
+
+
+    <!-- Cuadrícula de selección: Iteración de componentes de vasos -->
+    <div class="vasos-grid">
+      <div
+        class="vaso-item"
+        *ngFor="let vaso of vasos"
+        (click)="alternarVaso(vaso.numero)"
+      >
+        <span class="numero">{{ vaso.numero }}</span>
+
+        <div
+          class="vaso"
+          [class.tomado]="vaso.tomado"
+        >
+          <div
+            class="agua"
+            [class.lleno]="vaso.tomado"
+          ></div>
+        </div>
+
+        <div class="check">
+          <span *ngIf="vaso.tomado">
+            ✓
+          </span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Indicador de progreso: Barra visual y métricas de consumo diario -->
+    <div class="progreso-container">
+      <div class="progreso-info">
+        <span>Progreso de hoy</span>
+        <strong>{{ porcentajeMeta }}%</strong>
+      </div>
+
+      <div class="progreso">
+        <div
+          class="progreso-barra"
+          [style.width.%]="porcentajeMeta"
+        ></div>
+      </div>
+
+      <div class="progreso-detalle">
+        <span>{{ totalLitros.toFixed(2) }} L consumidos</span>
+        <span>Meta: 2.00 L</span>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- Panel de indicadores: Resumen estadístico del periodo actual -->
+  <div class="resumen-grid">
+
+    <div class="resumen-card">
+      <div class="icono">💧</div>
+      <div>
+        <span>Hoy</span>
+        <strong>{{ totalLitros.toFixed(2) }} L</strong>
+      </div>
+    </div>
+
+    <div class="resumen-card">
+      <div class="icono">🥛</div>
+      <div>
+        <span>Vasos</span>
+        <strong>{{ vasosTomados }}</strong>
+      </div>
+    </div>
+
+    <div class="resumen-card">
+      <div class="icono">🎯</div>
+      <div>
+        <span>Meta diaria</span>
+        <strong>2.00 L</strong>
+      </div>
+    </div>
+
+    <div class="resumen-card">
+      <div class="icono">📅</div>
+      <div>
+        <span>Este mes</span>
+        <strong>49.5 L</strong>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- Sección de evaluación del usuario: Notas y seguimiento emocional -->
+  <div class="registro-extra">
+
+    <!-- Campo de observaciones en texto libre -->
+    <div class="card notas-card">
+      <h2>📝 Notas</h2>
+      <textarea
+        [(ngModel)]="nota"
+        placeholder="¿Cómo te sentiste hoy?">
+      </textarea>
+    </div>
+
+
+    <!-- Selector interactivo de estado de ánimo -->
+    <div class="card estado-card">
+      <h2>Hoy me siento...</h2>
+      <div class="estados">
+        <button
+          type="button"
+          *ngFor="let estado of estados"
+          class="estado"
+          [class.seleccionado]="estadoSeleccionado === estado.nombre"
+          (click)="seleccionarEstado(estado.nombre)"
+        >
+          <span>{{ estado.emoji }}</span>
+          <small>{{ estado.nombre }}</small>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- Acción principal: Almacenamiento de datos del formulario -->
+  <button
+    type="button"
+    class="btn-guardar"
+    (click)="guardarRegistro()"
+  >
+    💧 Guardar registro
+  </button>
+
+
+  <!-- Módulo de análisis visual: Gráfico de barras del consumo mensual -->
+  <div class="card grafica-card">
+
+    <div class="grafica-header">
+      <div>
+        <h2>📊 Mi consumo de agua</h2>
+        <p>Septiembre 2026</p>
+      </div>
+      <div class="total-mes">
+        <span>Total</span>
+        <strong>49.5 L</strong>
+      </div>
+    </div>
+
+
+    <!-- Renderizado del gráfico de barras -->
+    <div class="grafica">
+      <!-- Líneas de referencia del eje Y -->
+      <div class="linea linea-2"></div>
+      <div class="linea linea-1"></div>
+      <div class="linea linea-05"></div>
+      <div class="linea linea-0"></div>
+
+      <!-- Datos del gráfico generados dinámicamente -->
+      <div class="barras">
+        <div
+          class="barra-item"
+          *ngFor="let registro of consumoMensual"
+        >
+          <div class="barra-contenedor">
+            <div
+              class="barra"
+              [style.height.px]="registro.litros * 60"
+            >
+            </div>
+          </div>
+          <span>{{ registro.dia }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grafica-leyenda">
+      <span>💧 Litros consumidos por día</span>
+    </div>
+
+  </div>
+
+</div>
